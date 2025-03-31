@@ -1,10 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { Job } from "@shared/schema";
-import { AuthContext } from "@/App";
 import { apiRequest } from "@/lib/queryClient";
 import { Building, MapPin, Briefcase, DollarSign, Heart, Clock, User, ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -19,8 +18,20 @@ const JobDetails: React.FC = () => {
   const { id } = useParams();
   const jobId = parseInt(id);
   const [, navigate] = useLocation();
-  const { user } = useContext(AuthContext);
+  const [user, setUser] = useState<any | null>(null);
   const { toast } = useToast();
+  
+  // Load user from localStorage
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error("Failed to load user from localStorage:", error);
+    }
+  }, []);
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 

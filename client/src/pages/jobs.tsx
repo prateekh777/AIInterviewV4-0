@@ -1,13 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import JobFilters from "@/components/job/job-filters";
 import JobListItem from "@/components/job/job-list-item";
 import { Job } from "@shared/schema";
-import { AuthContext } from "@/App";
 import { apiRequest } from "@/lib/queryClient";
-import { Building, MapPin, Briefcase, DollarSign, Heart, Clock, User } from "lucide-react";
+import { Building, MapPin, Briefcase, DollarSign, Heart, Clock, User as UserIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -17,8 +16,20 @@ import { formatRelativeTime } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
 
 const Jobs: React.FC = () => {
-  const { user } = useContext(AuthContext);
+  const [user, setUser] = useState<any | null>(null);
   const { toast } = useToast();
+  
+  // Load user from localStorage
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error("Failed to load user from localStorage:", error);
+    }
+  }, []);
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<any>({});
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
@@ -305,7 +316,7 @@ const Jobs: React.FC = () => {
                     <div className="mb-6">
                       <div className="flex items-center mb-3">
                         <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
-                          <User className="h-5 w-5" />
+                          <UserIcon className="h-5 w-5" />
                         </div>
                         <div>
                           <h4 className="text-sm font-medium text-neutral-800">Hiring Manager</h4>
@@ -328,7 +339,7 @@ const Jobs: React.FC = () => {
                     <div className="mb-6">
                       <h3 className="text-lg font-semibold text-neutral-800 mb-3">Responsibilities</h3>
                       <ul className="list-disc list-inside space-y-2 text-neutral-600">
-                        {selectedJob.responsibilities.split("\n").map((responsibility, index) => (
+                        {selectedJob.responsibilities.split("\n").map((responsibility: string, index: number) => (
                           <li key={index}>{responsibility}</li>
                         ))}
                       </ul>
@@ -388,7 +399,7 @@ const Jobs: React.FC = () => {
                 <div className="mb-4 sm:mb-0 sm:mr-6">
                   <h3 className="text-xl font-semibold text-white mb-2">Complete your profile</h3>
                   <p className="text-indigo-100">Complete your profile to increase your chances of getting hired. Add your skills, experience, and education.</p>
-                  <Button className="mt-4 bg-white text-primary hover:bg-neutral-100" onClick={() => navigate("/profile")}>
+                  <Button className="mt-4 bg-white text-primary hover:bg-neutral-100">
                     Update profile
                   </Button>
                 </div>
@@ -406,7 +417,7 @@ const Jobs: React.FC = () => {
                     </div>
                   </div>
                   <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center border-2 border-white">
-                    <User className="h-6 w-6 text-neutral-400" />
+                    <UserIcon className="h-6 w-6 text-neutral-400" />
                   </div>
                 </div>
               </div>

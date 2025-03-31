@@ -13,9 +13,10 @@ interface JobListItemProps {
   onSave?: (jobId: number) => void;
   isSaved?: boolean;
   userId?: number | null;
+  onClick?: () => void;
 }
 
-const getIconByName = (iconName: string | undefined) => {
+const getIconByName = (iconName: string | null | undefined) => {
   switch (iconName) {
     case "bezier-curve":
       return "fas fa-bezier-curve";
@@ -30,7 +31,7 @@ const getIconByName = (iconName: string | undefined) => {
   }
 };
 
-const getIconColorClass = (iconName: string | undefined) => {
+const getIconColorClass = (iconName: string | null | undefined) => {
   switch (iconName) {
     case "bezier-curve":
       return "bg-gradient-to-br from-purple-500 to-pink-500";
@@ -51,6 +52,7 @@ const JobListItem: React.FC<JobListItemProps> = ({
   onSave,
   isSaved = false,
   userId = null,
+  onClick,
 }) => {
   const [, navigate] = useLocation();
   const [isHovering, setIsHovering] = useState(false);
@@ -58,7 +60,11 @@ const JobListItem: React.FC<JobListItemProps> = ({
   const { toast } = useToast();
 
   const handleJobClick = () => {
-    navigate(`/jobs/${job.id}`);
+    if (onClick) {
+      onClick();
+    } else {
+      navigate(`/jobs/${job.id}`);
+    }
   };
 
   const handleSaveClick = async (e: React.MouseEvent) => {
@@ -99,8 +105,8 @@ const JobListItem: React.FC<JobListItemProps> = ({
     }
   };
 
-  const iconClass = getIconColorClass(job.companyLogo);
-  const iconName = getIconByName(job.companyLogo);
+  const iconClass = getIconColorClass(job.companyLogo || undefined);
+  const iconName = getIconByName(job.companyLogo || undefined);
 
   return (
     <div
