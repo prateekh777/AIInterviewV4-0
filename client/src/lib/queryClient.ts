@@ -11,10 +11,32 @@ export async function apiRequest(
   method: string,
   url: string,
   data?: unknown | undefined,
+  addAuthHeader: boolean = true,
 ): Promise<Response> {
+  const headers: Record<string, string> = {};
+  
+  if (data) {
+    headers["Content-Type"] = "application/json";
+  }
+  
+  // Add auth header if requested and user exists in localStorage
+  if (addAuthHeader) {
+    try {
+      const userString = localStorage.getItem("user");
+      if (userString) {
+        const user = JSON.parse(userString);
+        if (user && user.id) {
+          headers["Authorization"] = `Bearer ${user.id}`;
+        }
+      }
+    } catch (e) {
+      console.error("Failed to add auth header:", e);
+    }
+  }
+  
   const res = await fetch(url, {
     method,
-    headers: data ? { "Content-Type": "application/json" } : {},
+    headers,
     body: data ? JSON.stringify(data) : undefined,
     credentials: "include",
   });
@@ -29,8 +51,24 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
+    // Create headers with auth token if available
+    const headers: Record<string, string> = {};
+    
+    try {
+      const userString = localStorage.getItem("user");
+      if (userString) {
+        const user = JSON.parse(userString);
+        if (user && user.id) {
+          headers["Authorization"] = `Bearer ${user.id}`;
+        }
+      }
+    } catch (e) {
+      console.error("Failed to add auth header:", e);
+    }
+    
     const res = await fetch(queryKey[0] as string, {
       credentials: "include",
+      headers
     });
 
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {

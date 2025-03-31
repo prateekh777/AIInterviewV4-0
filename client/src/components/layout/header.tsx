@@ -1,7 +1,6 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import { Link, useLocation } from "wouter";
 import Logo from "../ui/logo";
-import { AuthContext } from "@/App";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,13 +12,27 @@ import {
 import { Bell, MessageSquare, Globe, HelpCircle } from "lucide-react";
 
 const Header: React.FC = () => {
-  const { user, setUser } = useContext(AuthContext);
+  // Get user from localStorage directly for now
+  // This is a temporary solution until we fully implement auth context
+  const [user, setUser] = React.useState<any>(null);
   const [, navigate] = useLocation();
-
+  
+  // Initialize user from localStorage
+  React.useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error("Failed to parse user from localStorage", error);
+    }
+  }, []);
+  
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
-    navigate("/");
+    navigate("/sign-in");
   };
 
   const navItems = [

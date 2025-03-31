@@ -265,6 +265,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get current user
+  app.get("/api/user", async (req: Request, res: Response) => {
+    try {
+      // In a real app with sessions, this would use session data
+      // For demo purposes, we're accepting a userId from query param or authentication header
+      let userId: number | undefined;
+      
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        // In real apps, this would verify a JWT token
+        const token = authHeader.slice(7);
+        userId = parseInt(token);
+      } else if (req.query.userId) {
+        userId = parseInt(req.query.userId as string);
+      }
+      
+      if (!userId || isNaN(userId)) {
+        return res.status(400).json({ message: "Valid user ID is required" });
+      }
+      
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Don't send the password
+      const { password, ...userWithoutPassword } = user;
+      
+      res.json(userWithoutPassword);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

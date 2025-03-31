@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import Logo from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
@@ -8,12 +8,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Globe, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { AuthContext } from "@/App";
 
 const SignIn: React.FC = () => {
   const [, navigate] = useLocation();
-  const { setUser } = useContext(AuthContext);
   const { toast } = useToast();
+  
+  // Check if user is already logged in
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      navigate("/");
+    }
+  }, [navigate]);
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
@@ -56,8 +62,7 @@ const SignIn: React.FC = () => {
       const response = await apiRequest("POST", "/api/auth/login", credentials);
       const userData = await response.json();
       
-      // Save user to context and localStorage
-      setUser(userData);
+      // Save user to localStorage
       localStorage.setItem("user", JSON.stringify(userData));
       
       toast({
