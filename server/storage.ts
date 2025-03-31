@@ -89,7 +89,15 @@ export class MemStorage implements IStorage {
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userId++;
     const createdAt = new Date();
-    const user: User = { ...insertUser, id, createdAt, resume: null, coverLetter: null };
+    const user: User = { 
+      ...insertUser, 
+      id, 
+      createdAt, 
+      resume: null, 
+      coverLetter: null,
+      fullName: insertUser.fullName || null,
+      phone: insertUser.phone || null
+    };
     this.users.set(id, user);
     return user;
   }
@@ -158,7 +166,15 @@ export class MemStorage implements IStorage {
   async createJob(insertJob: InsertJob): Promise<Job> {
     const id = this.jobId++;
     const postedDate = new Date();
-    const job: Job = { ...insertJob, id, postedDate, isActive: true };
+    const job: Job = { 
+      ...insertJob, 
+      id, 
+      postedDate, 
+      isActive: true,
+      salary: insertJob.salary || null,
+      companySize: insertJob.companySize || null,
+      companyLogo: insertJob.companyLogo || null
+    };
     this.jobs.set(id, job);
     return job;
   }
@@ -196,7 +212,8 @@ export class MemStorage implements IStorage {
       ...insertApplication, 
       id, 
       applicationDate, 
-      status: "applied" 
+      status: "applied",
+      coverLetter: insertApplication.coverLetter || null
     };
     this.applications.set(id, application);
     return application;
@@ -250,8 +267,7 @@ export class MemStorage implements IStorage {
       username: "demo",
       email: "demo@brivio.com",
       password: "password",
-      fullName: "Demo User",
-      role: "jobseeker"
+      fullName: "Demo User"
     };
     this.createUser(demoUser);
     
@@ -333,7 +349,15 @@ export class MemStorage implements IStorage {
     sampleJobs.forEach(job => {
       const id = this.jobId++;
       const postedDate = new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000); // Random date within last 30 days
-      const completeJob: Job = { ...job, id, postedDate, isActive: true };
+      const completeJob: Job = { 
+        ...job, 
+        id, 
+        postedDate, 
+        isActive: true,
+        salary: job.salary || null,
+        companySize: job.companySize || null,
+        companyLogo: job.companyLogo || null
+      };
       this.jobs.set(id, completeJob);
     });
   }

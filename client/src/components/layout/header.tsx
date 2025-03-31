@@ -30,30 +30,28 @@ const Header: React.FC = () => {
     { label: "Career Advisors", path: "/advisors" },
   ];
 
-  const [, currentPath] = useLocation();
+  const [currentPath] = useLocation();
 
   return (
     <header className="bg-white border-b border-neutral-200 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-6">
           <Link href="/">
-            <a>
-              <Logo />
-            </a>
+            <Logo />
           </Link>
 
           <nav className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
               <Link key={item.path} href={item.path}>
-                <a 
-                  className={`text-sm font-medium ${
-                    currentPath === item.path
+                <span 
+                  className={`text-sm font-medium cursor-pointer ${
+                    window.location.pathname === item.path
                       ? "text-primary hover:text-primary-dark"
                       : "text-neutral-500 hover:text-neutral-800"
                   }`}
                 >
                   {item.label}
-                </a>
+                </span>
               </Link>
             ))}
           </nav>
@@ -63,16 +61,12 @@ const Header: React.FC = () => {
           {!user ? (
             <div className="flex space-x-2">
               <Link href="/sign-in">
-                <a>
-                  <Button variant="outline" size="sm">
-                    Sign In
-                  </Button>
-                </a>
+                <Button variant="outline" size="sm">
+                  Sign In
+                </Button>
               </Link>
               <Link href="/sign-up">
-                <a>
-                  <Button size="sm">Sign Up</Button>
-                </a>
+                <Button size="sm">Sign Up</Button>
               </Link>
             </div>
           ) : (
@@ -116,17 +110,17 @@ const Header: React.FC = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href="/profile">
-                      <a className="cursor-pointer w-full">Profile</a>
+                      <span className="cursor-pointer w-full">Profile</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/applications">
-                      <a className="cursor-pointer w-full">My Applications</a>
+                      <span className="cursor-pointer w-full">My Applications</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/saved-jobs">
-                      <a className="cursor-pointer w-full">Saved Jobs</a>
+                      <span className="cursor-pointer w-full">Saved Jobs</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
