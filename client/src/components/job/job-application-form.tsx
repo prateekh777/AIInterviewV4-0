@@ -1,7 +1,6 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Job } from "@shared/schema";
 import { X, Upload, ArrowLeft, MapPin, Briefcase, DollarSign, Laptop } from "lucide-react";
-import { AuthContext } from "@/App";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,10 +15,26 @@ interface JobApplicationFormProps {
 }
 
 const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ job, onClose }) => {
-  const { user } = useContext(AuthContext);
-  const [fullName, setFullName] = useState(user?.fullName || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [phone, setPhone] = useState(user?.phone || "");
+  const [user, setUser] = useState<any | null>(null);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  
+  // Load user from localStorage
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+        setUser(userData);
+        setFullName(userData.fullName || "");
+        setEmail(userData.email || "");
+        setPhone(userData.phone || "");
+      }
+    } catch (error) {
+      console.error("Failed to load user from localStorage:", error);
+    }
+  }, []);
   const [coverLetter, setCoverLetter] = useState("");
   const [resume, setResume] = useState<File | null>(null);
   const [resumeName, setResumeName] = useState("");
