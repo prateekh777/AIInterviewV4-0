@@ -15,8 +15,8 @@ import { formatRelativeTime } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
 
 const JobDetails: React.FC = () => {
-  const { id } = useParams();
-  const jobId = parseInt(id);
+  const { id } = useParams<{ id: string }>();
+  const jobId = id ? parseInt(id) : 0;
   const [, navigate] = useLocation();
   const [user, setUser] = useState<any | null>(null);
   const { toast } = useToast();
@@ -57,13 +57,16 @@ const JobDetails: React.FC = () => {
       }
       return res.json();
     },
-    enabled: !!user,
-    onSuccess: (data) => {
-      if (data.some((savedJob: any) => savedJob.jobId === jobId)) {
-        setIsSaved(true);
-      }
-    }
+    enabled: !!user
   });
+  
+  // Check if job is saved when savedJobs change
+  useEffect(() => {
+    if (savedJobs && Array.isArray(savedJobs)) {
+      const isSavedJob = savedJobs.some((savedJob: { jobId: number }) => savedJob.jobId === jobId);
+      setIsSaved(isSavedJob);
+    }
+  }, [savedJobs, jobId]);
 
   const handleSaveJob = async () => {
     if (!user) {
@@ -260,7 +263,7 @@ const JobDetails: React.FC = () => {
                     </div>
                     
                     <Button variant="link" className="text-primary p-0 h-auto font-medium text-sm hover:text-primary-dark">
-                      <i className="far fa-comment-dots mr-1"></i> Message
+                      Message
                     </Button>
                   </div>
                   
@@ -274,7 +277,7 @@ const JobDetails: React.FC = () => {
                   <div className="mb-6">
                     <h3 className="text-lg font-semibold text-neutral-800 mb-3">Responsibilities</h3>
                     <ul className="list-disc list-inside space-y-2 text-neutral-600">
-                      {job.responsibilities.split("\n").map((responsibility, index) => (
+                      {job.responsibilities.split("\n").map((responsibility: string, index: number) => (
                         <li key={index}>{responsibility}</li>
                       ))}
                     </ul>
@@ -292,7 +295,7 @@ const JobDetails: React.FC = () => {
                           ? "bg-gradient-to-br from-green-400 to-cyan-400" 
                           : "bg-gradient-to-br from-blue-500 to-indigo-500"
                       }`}>
-                        <i className={`fas fa-${job.companyLogo || "building"} text-xl`}></i>
+                        <Building className="h-6 w-6" />
                       </div>
                       <div>
                         <h4 className="font-medium text-neutral-800">{job.company.toUpperCase()}</h4>
@@ -307,7 +310,7 @@ const JobDetails: React.FC = () => {
                     <div className="flex flex-wrap gap-x-6 gap-y-3">
                       {job.companySize && (
                         <div className="flex items-center text-sm text-neutral-600">
-                          <i className="fas fa-users mr-2 text-neutral-400"></i>
+                          <User className="mr-2 text-neutral-400 h-4 w-4" />
                           <span>{job.companySize}</span>
                         </div>
                       )}
@@ -351,7 +354,7 @@ const JobDetails: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* This would be populated with similar jobs based on the current job's category, title, etc. */}
               {/* For this demo, we'll show a loading state */}
-              {Array(3).fill(0).map((_, i) => (
+              {Array(3).fill(0).map((_: any, i: number) => (
                 <div key={i} className="bg-white rounded-lg border border-neutral-200 p-4">
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex items-center">
