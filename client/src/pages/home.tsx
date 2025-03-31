@@ -30,7 +30,7 @@ const Home: React.FC = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-3xl md:text-5xl font-bold mb-6">
-                Find Your Dream Job with <span className="text-primary">TalentFlow</span>
+                Find Your Dream Job with <span className="text-primary">Brivio</span>
               </h1>
               <p className="text-lg text-neutral-600 mb-8">
                 Search through thousands of job listings to find the perfect match for your skills and aspirations.
@@ -77,7 +77,7 @@ const Home: React.FC = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-                Why Choose <span className="text-primary">TalentFlow</span>
+                Why Choose <span className="text-primary">Brivio</span>
               </h2>
               <p className="text-neutral-600 max-w-2xl mx-auto">
                 Our platform makes it easy to find and apply for jobs that match your skills and career goals.
@@ -278,7 +278,7 @@ const Home: React.FC = () => {
               Ready to Find Your Dream Job?
             </h2>
             <p className="max-w-2xl mx-auto mb-8">
-              Join thousands of job seekers who have found their perfect career match on TalentFlow.
+              Join thousands of job seekers who have found their perfect career match on Brivio.
             </p>
             <Button
               variant="secondary"
@@ -299,7 +299,7 @@ const Home: React.FC = () => {
                 What Our <span className="text-primary">Users</span> Say
               </h2>
               <p className="text-neutral-600 max-w-2xl mx-auto">
-                Hear from people who have found jobs using TalentFlow.
+                Hear from people who have found jobs using Brivio.
               </p>
             </div>
 
@@ -315,7 +315,7 @@ const Home: React.FC = () => {
                   ))}
                 </div>
                 <p className="text-neutral-600 mb-6">
-                  "I found my dream job at a tech startup using TalentFlow. The platform made it easy to filter jobs and apply quickly."
+                  "I found my dream job at a tech startup using Brivio. The platform made it easy to filter jobs and apply quickly."
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-neutral-200 mr-3"></div>
@@ -337,7 +337,7 @@ const Home: React.FC = () => {
                   ))}
                 </div>
                 <p className="text-neutral-600 mb-6">
-                  "As a recent graduate, I was worried about finding a job. TalentFlow made the process so much easier with their user-friendly interface."
+                  "As a recent graduate, I was worried about finding a job. Brivio made the process so much easier with their user-friendly interface."
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-neutral-200 mr-3"></div>
@@ -359,7 +359,7 @@ const Home: React.FC = () => {
                   ))}
                 </div>
                 <p className="text-neutral-600 mb-6">
-                  "I've used several job boards, but TalentFlow has the best features. I especially love the ability to track all my applications."
+                  "I've used several job boards, but Brivio has the best features. I especially love the ability to track all my applications."
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-neutral-200 mr-3"></div>

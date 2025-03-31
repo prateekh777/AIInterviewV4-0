@@ -245,6 +245,16 @@ export class MemStorage implements IStorage {
 
   // Initialize with some sample data for demonstration
   private initializeSampleData() {
+    // Sample users
+    const demoUser: InsertUser = {
+      username: "demo",
+      email: "demo@brivio.com",
+      password: "password",
+      fullName: "Demo User",
+      role: "jobseeker"
+    };
+    this.createUser(demoUser);
+    
     // Sample jobs
     const sampleJobs: InsertJob[] = [
       {

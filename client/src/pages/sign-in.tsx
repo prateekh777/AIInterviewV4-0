@@ -53,7 +53,8 @@ const SignIn: React.FC = () => {
       // Show loading state for a moment
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      const userData = await apiRequest("POST", "/api/auth/login", credentials);
+      const response = await apiRequest("POST", "/api/auth/login", credentials);
+      const userData = await response.json();
       
       // Save user to context and localStorage
       setUser(userData);

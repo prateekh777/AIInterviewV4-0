@@ -56,6 +56,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { username, password } = req.body;
       
+      console.log("Login attempt:", { username, password });
+      
       // Validate input
       if (!username || !password) {
         return res.status(400).json({ message: "Username and password are required" });
@@ -63,11 +65,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Find user
       const user = await storage.getUserByUsername(username);
+      console.log("User found:", user ? "Yes" : "No");
+      
       if (!user) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
       
       // Check password (in a real app, you'd use bcrypt to compare hashed passwords)
+      console.log("Password check:", user.password === password ? "Match" : "No match");
+      
       if (user.password !== password) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
